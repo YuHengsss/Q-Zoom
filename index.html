@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Q-Zoom: a query-aware adaptive high-resolution perception framework for Multimodal Large Language Models. Coarse-to-fine inference with a Self-Distilled RPN and a Dynamic Gating Network.">
+<meta name="keywords" content="Q-Zoom, MLLM, vision-language, region of interest, high-resolution perception, Qwen2.5-VL, Qwen3-VL, SD-RPN, dynamic gating">
+<meta name="author" content="Yuheng Shi, Minjing Dong, Chang Xu">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Q-Zoom: Query-Aware Adaptive Perception for Efficient Multimodal Large Language Models">
+<meta property="og:description" content="Coarse-to-fine MLLM inference with a Self-Distilled RPN and a Dynamic Gating Network. 2.52× Doc/OCR speedup, 4.39× HR speedup.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/paradigm_comparison.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<title>Q-Zoom: Query-Aware Adaptive Perception for Efficient MLLMs</title>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231f6feb'/%3E%3Ctext x='50' y='62' font-family='system-ui' font-size='52' font-weight='800' text-anchor='middle' fill='white'%3EQ%3C/text%3E%3C/svg%3E">
+
+<!-- Google Fonts: Google Sans (matches Nerfies / academic project page convention) -->
+<link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+<!-- Bulma CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+<style>
+  :root {
+    --accent: #1f6feb;
+    --accent-soft: #ddf4ff;
+  }
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    color: #1f2328;
+  }
+  .navbar { border-bottom: 1px solid #e6e6e6; }
+  .hero.is-light { background: #fafbfc; }
+  .title.is-1, .title.is-2, .title.is-3, .subtitle.is-3 {
+    font-family: 'Google Sans', sans-serif;
+  }
+  .publication-title {
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .publication-authors {
+    margin-top: 1.25rem;
+    color: #444;
+  }
+  .publication-authors .author-block {
+    margin: 0 8px;
+  }
+  .publication-affiliations {
+    color: #666;
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-top: 0.4rem;
+  }
+  .publication-links {
+    margin-top: 1.6rem;
+  }
+  .publication-links .external-link {
+    margin: 0 4px;
+  }
+  .button.is-rounded {
+    border-radius: 9999px;
+    padding: 0 22px;
+  }
+  .button.is-dark {
+    background: #1f2328;
+    color: #fff;
+  }
+  .button.is-dark:hover { background: #000; }
+  .section-title {
+    text-align: center;
+    margin-bottom: 1.6rem !important;
+    font-family: 'Google Sans', sans-serif;
+  }
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 1.2rem 0 1.6rem;
+  }
+  @media (max-width: 720px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  .stat {
+    border: 1px solid #e6e6e6;
+    background: #fafbfc;
+    border-radius: 8px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .stat .num {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: 'Google Sans', sans-serif;
+  }
+  .stat .label {
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+  }
+  .figure-block {
+    margin: 1.4rem auto 1.6rem;
+    text-align: center;
+  }
+  .figure-block img {
+    max-width: 100%;
+    height: auto;
+  }
+  .figure-block .caption {
+    color: #555;
+    font-size: 0.9rem;
+    margin-top: 0.6rem;
+    font-style: italic;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .columns.figure-row {
+    margin-top: 0.8rem;
+  }
+  .content h2.section-title {
+    border-bottom: none;
+  }
+  .content h3 {
+    font-family: 'Google Sans', sans-serif;
+    margin-top: 1.6em;
+  }
+  .bibtex-block {
+    background: #f6f8fa;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+  .pre-checkpoint {
+    background: #f6f8fa;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+  }
+  .table th, .table td { vertical-align: middle; }
+  .table thead th { background: #fafbfc; }
+  footer.footer {
+    background: #fafbfc;
+    border-top: 1px solid #e6e6e6;
+    padding: 2rem 1.5rem;
+    color: #666;
+    font-size: 0.85rem;
+  }
+  .footer .content { text-align: center; }
+  a { color: var(--accent); }
+  blockquote {
+    background: var(--accent-soft);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    margin: 1.2em 0;
+    border-radius: 0 4px 4px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================== HERO ============================== -->
+<section class="hero is-light">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <h1 class="title is-2 publication-title">
+            Q-Zoom: Query-Aware Adaptive Perception<br>
+            for Efficient Multimodal Large Language Models
+          </h1>
+
+          <div class="publication-authors">
+            <span class="author-block">
+              <a href="mailto:yshi0087@uni.sydney.edu.au">Yuheng Shi</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="mailto:xiaohuan.pei@sydney.edu.au">Xiaohuan Pei</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="mailto:wenlf5@mail2.sysu.edu.cn">Linfeng Wen</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="mailto:minjdong@cityu.edu.hk">Minjing Dong</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="mailto:c.xu@sydney.edu.au">Chang Xu</a><sup>1,&nbsp;✉</sup>
+            </span>
+          </div>
+
+          <div class="publication-affiliations">
+            <sup>1</sup>The University of Sydney &nbsp;·&nbsp;
+            <sup>2</sup>Sun Yat-sen University &nbsp;·&nbsp;
+            <sup>3</sup>City University of Hong Kong
+            <br>
+            <span style="font-size: 0.85rem;">✉ Corresponding author</span>
+          </div>
+
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/XXXX.XXXXX" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://github.com/YuHengsss/Q-Zoom" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-7B" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">🤗</span>
+                <span>Models</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://huggingface.co/datasets/YuhengSSS/Q-Zoom-Training" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">📦</span>
+                <span>Training Data</span>
+              </a>
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== TEASER ============================== -->
+<section class="section" style="padding-top: 2rem;">
+  <div class="container is-max-desktop">
+    <div class="figure-block">
+      <img src="assets/paradigm_comparison.png" alt="Q-Zoom vs training-tree and RL paradigms">
+      <p class="caption">
+        Compared to training-tree-based detail-zoom methods (e.g. ViCrop, 4.2 s) and RL-supervised
+        tool-use methods (e.g. Thyme, 15.9 s), <strong>Q-Zoom</strong> answers the same question
+        with a single forward pass plus an optional ROI re-decode — at <strong>1.4 s</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== INTRODUCTION ============================== -->
+<section class="section" id="introduction" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 section-title">Introduction</h2>
+        <div class="content">
+          <p>
+            <strong>Q-Zoom</strong> is a query-aware adaptive perception framework that lets a
+            Multimodal LLM look at high resolution <em>only when it needs to, and only where it
+            needs to</em> — without changing the underlying backbone. Instead of indiscriminately
+            flooding the quadratic self-attention with redundant high-resolution tokens, Q-Zoom
+            reasons in a coarse-to-fine manner using two lightweight modules grafted on top of
+            an off-the-shelf MLLM:
+          </p>
+
+          <ol>
+            <li>
+              <strong>Dynamic Gating Network.</strong> A small head decides per query whether
+              the coarse global pass already suffices, and only routes the hard cases through
+              the high-resolution refinement loop. Routing labels come from a
+              <em>consistency-aware</em> sample-generation strategy that filters unstable /
+              contradictory examples before BCE supervision.
+            </li>
+            <li>
+              <strong>Self-Distilled Region Proposal Network (SD-RPN).</strong> When detail
+              <em>is</em> needed, SD-RPN localizes the task-relevant Region-of-Interest directly
+              from the MLLM's own intermediate feature space — fully self-supervised, with no
+              external detector and no extra annotation. The cropped region is then re-decoded
+              and fused with the coarse global layout via a continuous spatio-temporal
+              alignment scheme + targeted post-SFT.
+            </li>
+            <li>
+              <strong>Single-pass coarse-to-fine inference.</strong> At test time Q-Zoom always
+              emits a direct response from the low-resolution pass; the gating head decides
+              per sample whether to also emit a RoI-based response. The two are fused in a
+              single forward path — no tree search, no RL roll-outs, no external tool calls.
+            </li>
+          </ol>
+
+          <p>
+            Together, these three pieces let Q-Zoom establish a <strong>dominant Pareto
+            frontier</strong>: on Qwen2.5-VL-7B it is <strong>2.52× faster</strong> on Doc/OCR
+            benchmarks and <strong>4.39× faster</strong> on high-resolution benchmarks at
+            matched accuracy, and when configured for maximum fidelity it surpasses the
+            baseline's peak by <strong>+1.1%</strong> and <strong>+8.1%</strong> respectively.
+            The recipe transfers seamlessly to Qwen3-VL, LLaVA-1.5, and emerging RL-based
+            thinking-with-image models — Q-Zoom is, to our knowledge, the first
+            architecture-agnostic adaptive-perception framework that delivers both throughput
+            <em>and</em> accuracy gains across this many backbones.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num">2.52×</div><div class="label">Doc/OCR speedup<br>(Qwen2.5-VL-7B)</div></div>
+      <div class="stat"><div class="num">4.39×</div><div class="label">High-res speedup<br>(Qwen2.5-VL-7B)</div></div>
+      <div class="stat"><div class="num">+1.1%</div><div class="label">Doc/OCR over baseline peak</div></div>
+      <div class="stat"><div class="num">+8.1%</div><div class="label">High-res over baseline peak</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================== METHOD ============================== -->
+<section class="section" id="method">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title">Method</h2>
+
+    <div class="content">
+      <h3>Inference: gated two-pass decoding</h3>
+      <p>
+        At inference, Q-Zoom always emits a <em>direct response</em> from the low-resolution
+        pass; the high-res gating head decides per sample whether to also emit a <em>RoI-based
+        response</em> by re-decoding the cropped region predicted by SD-RPN.
+      </p>
+    </div>
+    <div class="figure-block">
+      <img src="assets/inference_pipeline.png" alt="Q-Zoom two-pass inference" style="max-width:78%;">
+    </div>
+
+    <div class="content">
+      <h3>Three-stage training pipeline</h3>
+      <p>
+        Each stage trains a <strong>different subset</strong> of parameters while everything
+        else stays frozen:
+      </p>
+    </div>
+
+    <div class="content">
+      <h4 class="title is-5">Stage 1 — SD-RPN initialization</h4>
+      <p>
+        Train only the <code>twig_T</code> twig layers (the gating branch grafted on top of base
+        layer <code>twig_K</code>) using pseudo ROI maps generated by the base VLM. The base LLM,
+        <code>lm_head</code>, and vision encoder all stay frozen.
+      </p>
+    </div>
+    <div class="figure-block">
+      <img src="assets/stage1_sd_rpn.png" alt="Stage 1 — SD-RPN" style="max-width:78%;">
+    </div>
+
+    <div class="columns is-centered" style="align-items: stretch;">
+      <div class="column" style="flex: 0 0 36%; max-width: 36%;">
+        <div class="content">
+          <h4 class="title is-5">Stage 2 — Targeted post-SFT</h4>
+          <p>
+            The frozen TWIG branch is carried over from Stage 1; only the LLM decoder +
+            <code>lm_head</code> are trained on a hard-sample mixture mined by an
+            LLM-as-a-Judge that compares the direct response against the RoI response on
+            a fresh question pool.
+          </p>
+        </div>
+        <div class="figure-block">
+          <img src="assets/stage2_targeted_sft.png" alt="Stage 2 — Targeted Post-SFT">
+        </div>
+      </div>
+
+      <div class="column" style="flex: 0 0 60%; max-width: 60%;">
+        <div class="content">
+          <h4 class="title is-5">Stage 3 — Dynamic Gating Network</h4>
+          <p>
+            Train only the high-res gating network (<code>high_res_layers</code> +
+            <code>high_res_head</code>) that decides per input whether to fire the
+            high-resolution RoI refinement pass. Stage 3 uses a <em>consistency-aware</em>
+            sample-generation pipeline that filters unstable / contradictory examples
+            before BCE supervision.
+          </p>
+        </div>
+        <div class="figure-block">
+          <img src="assets/stage3_gated_roi.png" alt="Stage 3 — Dynamic Gating Network">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== RESULTS ============================== -->
+<section class="section" id="results" style="background:#fafbfc;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title">Results</h2>
+
+    <div class="content">
+      <h3>Main results</h3>
+      <p>
+        Q-Zoom is competitive with — and often surpasses — recent
+        detail-zoom and tool-use baselines across <strong>five</strong> backbones
+        (LLaVA-1.5-7B/13B, Qwen2.5-VL-3B/7B, Qwen3-VL-4B). It is the only
+        method whose throughput stays close to the vanilla model (≈0.6–0.9× of
+        baseline) while still posting the best average score in every block.
+      </p>
+    </div>
+
+    <div class="figure-block">
+      <img src="assets/main_results_doc_ocr.png" alt="Main results: Document &amp; OCR benchmarks">
+      <p class="caption">
+        <strong>Performance on Document &amp; OCR benchmarks.</strong>
+        Dataset subscripts denote the evaluation split. Performance
+        subscripts show the absolute improvement (↑) over the baseline.
+        Throughput is relative to the baseline, measured on a single
+        NVIDIA A6000 GPU, and our results are evaluated under a constraint
+        of <strong>576 maximum visual tokens</strong>.
+      </p>
+    </div>
+
+    <div class="figure-block">
+      <img src="assets/main_results_hr_vision.png" alt="Main results: Vision-Centric and High-Resolution benchmarks">
+      <p class="caption">
+        <strong>Performance on Vision-Centric and High-Resolution benchmarks.</strong>
+        Dataset subscripts denote the specific evaluation split; performance
+        subscripts indicate the absolute improvement (↑) of Q-Zoom over the
+        baseline. <strong>Tp</strong> denotes relative inference throughput,
+        and averages are computed exclusively across the four Overall metrics
+        (V* Bench, MME-RW-lite, HR-Bench-4K, HR-Bench-8K). Unless otherwise
+        noted, all Q-Zoom results are evaluated under a constraint of
+        <strong>4,096 maximum visual tokens</strong>. The † symbol marks
+        numbers cited directly from the corresponding original publications.
+      </p>
+    </div>
+
+    <div class="content">
+      <h3>Accuracy / throughput trade-off</h3>
+      <p>
+        Sweeping the visual-token budget from 256 to 4096 traces a Pareto curve. Q-Zoom (orange)
+        shifts the curve up and to the right of the baseline VLM (gray) on <strong>both</strong>
+        Doc/OCR-heavy and high-resolution vision benchmarks: at matched accuracy it is multiple
+        times faster, and at matched throughput it lifts average accuracy by several points.
+        The trend is consistent across both supported backbones.
+      </p>
+    </div>
+
+    <h4 class="title is-5 has-text-centered">Qwen2.5-VL-7B</h4>
+    <div class="columns is-centered figure-row">
+      <div class="column is-half">
+        <div class="figure-block">
+          <img src="assets/results_doc_ocr.png" alt="Qwen2.5-VL-7B Doc/OCR Pareto curve">
+          <p class="caption">Doc/OCR — 2.52× speedup at matched accuracy, +1.1% over baseline peak.</p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="figure-block">
+          <img src="assets/results_hr.png" alt="Qwen2.5-VL-7B HR Pareto curve">
+          <p class="caption">High-resolution — 4.39× speedup at matched accuracy, +8.1% over baseline peak.</p>
+        </div>
+      </div>
+    </div>
+
+    <h4 class="title is-5 has-text-centered" style="margin-top:1.6rem;">Qwen3-VL-4B</h4>
+    <div class="columns is-centered figure-row">
+      <div class="column is-half">
+        <div class="figure-block">
+          <img src="assets/results_doc_ocr_q3_4b.png" alt="Qwen3-VL-4B Doc/OCR Pareto curve">
+          <p class="caption">Doc/OCR — 1.70× speedup at matched accuracy, 53.1% visual-token reduction.</p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="figure-block">
+          <img src="assets/results_hr_q3_4b.png" alt="Qwen3-VL-4B HR Pareto curve">
+          <p class="caption">High-resolution — 2.73× speedup at matched accuracy, 72.9% visual-token reduction.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <h3>Qualitative examples</h3>
+    </div>
+    <div class="figure-block">
+      <img src="assets/qualitative_examples.png" alt="Q-Zoom qualitative examples with RoI heatmap">
+      <p class="caption">
+        SD-RPN produces a per-token attention map (middle column) that isolates the region the
+        question is actually about. The model then re-decodes only that region to recover the
+        correct answer.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CHECKPOINTS ============================== -->
+<section class="section" id="checkpoints">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title">Released checkpoints</h2>
+
+    <div class="content">
+      <p>The final Stage-3 weights are on Hugging Face for all three supported backbones.</p>
+    </div>
+
+    <table class="table is-fullwidth is-striped">
+      <thead>
+        <tr><th>Backbone</th><th>HF model</th><th class="has-text-centered">TWIG config</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Qwen2.5-VL-3B</td>
+          <td><a href="https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-3B"><code>YuhengSSS/Q-Zoom-Qwen2.5VL-3B</code></a></td>
+          <td class="has-text-centered">K=24, T=3</td>
+        </tr>
+        <tr>
+          <td>Qwen2.5-VL-7B</td>
+          <td><a href="https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-7B"><code>YuhengSSS/Q-Zoom-Qwen2.5VL-7B</code></a></td>
+          <td class="has-text-centered">K=18, T=3</td>
+        </tr>
+        <tr>
+          <td>Qwen3-VL-4B</td>
+          <td><a href="https://huggingface.co/YuhengSSS/Q-Zoom-Qwen3VL-4B"><code>YuhengSSS/Q-Zoom-Qwen3VL-4B</code></a></td>
+          <td class="has-text-centered">K=24, T=3</td>
+        </tr>
+      </tbody>
+    </table>
+
+<pre class="pre-checkpoint"><code>huggingface-cli download YuhengSSS/Q-Zoom-Qwen2.5VL-7B \
+  --local-dir ./checkpoints/Q-Zoom-Qwen2.5VL-7B \
+  --local-dir-use-symlinks False
+
+CHECKPOINT_PATH=./checkpoints/Q-Zoom-Qwen2.5VL-7B \
+  bash examples/eval_only/eval_qwen2_5vl_stage3.sh</code></pre>
+  </div>
+</section>
+
+<!-- ============================== BIBTEX ============================== -->
+<section class="section" id="bibtex" style="background:#fafbfc;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title">BibTeX</h2>
+<pre class="bibtex-block"><code>@article{qzoom,
+  title  = {Q-Zoom: Query-Aware Adaptive Perception for Efficient
+            Multimodal Large Language Models},
+  author = {Shi, Yuheng and Pei, Xiaohuan and Wen, Linfeng and
+            Dong, Minjing and Xu, Chang},
+  year   = {2026}
+}</code></pre>
+
+    <p style="margin-top: 1.4rem; color: #555;">
+      You may also be interested in our earlier work that introduced the self-distilled RoI
+      predictor used by Q-Zoom's SD-RPN branch:
+    </p>
+<pre class="bibtex-block"><code>@article{shi2025catching,
+  title  = {Catching the Details: Self-Distilled RoI Predictors for
+            Fine-Grained MLLM Perception},
+  author = {Shi, Yuheng and Pei, Xiaohuan and Dong, Minjing and Xu, Chang},
+  journal= {arXiv preprint arXiv:2509.16944},
+  year   = {2025}
+}</code></pre>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="footer">
+  <div class="content">
+    <p>
+      This page is part of the <a href="https://github.com/YuHengsss/Q-Zoom">Q-Zoom GitHub release</a>
+      (Apache 2.0). Built on top of
+      <a href="https://github.com/QwenLM/Qwen2.5-VL">Qwen2.5-VL</a> and
+      <a href="https://github.com/EvolvingLMMs-Lab/lmms-eval">lmms-eval</a>.
+    </p>
+    <p style="margin-top: 0.4rem;">
+      Page template adapted from the <a href="https://nerfies.github.io/">Nerfies</a> academic
+      project page (Bulma CSS).
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
