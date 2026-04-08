@@ -209,36 +209,27 @@ paper. Each Q-Zoom component (SD-RPN / Post-SFT / Dynamic Gate) maps
 - **Post-SFT** ⇄ Stage 2 (`examples/stage2_train_eval/`)
 - **Dynamic Gate** ⇄ Stage 3 (`examples/stage3_train_eval/`)
 
-| Component | Model family | Training source | Samples |
-|---|---|---|---:|
-| **SD-RPN** | Qwen-series | GQA | 72K |
-| | Qwen-series | OCR-VQA | 80K |
-| | Qwen-series | VCoT-DocVQA | 33K |
-| | Qwen-series | *Total* | *185K* |
-| | LLaVA-series | GQA | 72K |
-| | LLaVA-series | OCR-VQA | 80K |
-| | LLaVA-series | *Total* | *152K* |
-| **Post-SFT** | Qwen-series | TextVQA<sub>train</sub> | 34K |
-| | Qwen-series | ChartQA<sub>train</sub> | 28K |
-| | Qwen-series | VCoT-InfoVQA | 15K |
-| | Qwen-series | VCoT-DocVQA | 33K |
-| | Qwen-series | V\*-COCO | 44K |
-| | Qwen-series | *Mined hard samples (output)* | *~7K* |
-| **Dynamic Gate** | All models | VCoT-TextVQA | 18K |
-| | All models | VCoT-GQA | 50K |
-| | All models | VCoT-DocVQA | 33K |
-| | All models | ChartQA<sub>train</sub> | 28K |
-| | All models | *Filtered training set (output)* | *40K–60K* |
+| Component | Training source | Samples |
+|---|---|---:|
+| **SD-RPN** | GQA | 72K |
+| | OCR-VQA | 80K |
+| | VCoT-DocVQA | 33K |
+| | *Total* | *185K* |
+| **Post-SFT** | TextVQA<sub>train</sub> | 34K |
+| | ChartQA<sub>train</sub> | 28K |
+| | VCoT-InfoVQA | 15K |
+| | VCoT-DocVQA | 33K |
+| | V\*-COCO | 44K |
+| | *Mined hard samples (output)* | *~7K* |
+| **Dynamic Gate** | VCoT-TextVQA | 18K |
+| | VCoT-GQA | 50K |
+| | VCoT-DocVQA | 33K |
+| | ChartQA<sub>train</sub> | 28K |
+| | *Filtered training set (output)* | *40K–60K* |
 
 Italicized rows are **outputs** of the stage (the result of mining hard
 samples in Post-SFT, or the result of the gating-data filter in Dynamic
 Gate), not additional inputs you need to download.
-
-> **Note for the release templates:** the example scripts default to
-> the **Qwen-series** numbers above. Q-Zoom does support LLaVA-series
-> backbones (SD-RPN row with 152K samples — no `VCoT-DocVQA`), but the
-> `examples/` walkthroughs in this release ship with Qwen2.5-VL /
-> Qwen3-VL defaults only.
 
 ### Mapping paper-name → release filename
 
