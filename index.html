@@ -18,8 +18,8 @@
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231f6feb'/%3E%3Ctext x='50' y='62' font-family='system-ui' font-size='52' font-weight='800' text-anchor='middle' fill='white'%3EQ%3C/text%3E%3C/svg%3E">
 
-<!-- Google Fonts: Google Sans (matches Nerfies / academic project page convention) -->
-<link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+<!-- Refined typography inspired by polished academic project pages -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
 <!-- Bulma CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -28,156 +28,621 @@
 
 <style>
   :root {
-    --accent: #1f6feb;
-    --accent-soft: #ddf4ff;
+    --accent: #2563eb;
+    --accent-2: #0ea5e9;
+    --accent-soft: #e6f0ff;
+    --surface: rgba(255, 255, 255, 0.86);
+    --surface-muted: #f8fbff;
+    --border: rgba(148, 163, 184, 0.22);
+    --text: #0f172a;
+    --text-soft: #475569;
+    --text-faint: #64748b;
+    --hero-gradient: linear-gradient(180deg, #eef5ff 0%, #f8fbff 42%, #ffffff 100%);
+    --shadow-sm: 0 8px 24px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 20px 50px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 30px 70px rgba(37, 99, 235, 0.10);
+    --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  html {
+    scroll-behavior: smooth;
   }
   body {
-    font-family: 'Noto Sans', sans-serif;
-    color: #1f2328;
+    font-family: 'Inter', 'Noto Sans', sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(37, 99, 235, 0.10), transparent 30%),
+      radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 28%),
+      linear-gradient(180deg, #f4f8fd 0%, #f8fbff 18%, #f6f9fc 100%);
+    min-height: 100vh;
+    padding-top: 5.4rem;
   }
-  .navbar { border-bottom: 1px solid #e6e6e6; }
-  .hero.is-light { background: #fafbfc; }
-  .title.is-1, .title.is-2, .title.is-3, .subtitle.is-3 {
-    font-family: 'Google Sans', sans-serif;
+  ::selection {
+    background: rgba(37, 99, 235, 0.16);
+  }
+  .title.is-1, .title.is-2, .title.is-3, .subtitle.is-3, .title.is-5, .content h3 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    letter-spacing: -0.03em;
+  }
+  .section {
+    padding: 2rem 1.5rem;
+    scroll-margin-top: 112px;
+  }
+  .hero.is-light {
+    background: var(--hero-gradient);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero.is-light::before {
+    content: "";
+    position: absolute;
+    inset: auto -10% 14% auto;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, rgba(37, 99, 235, 0) 72%);
+    pointer-events: none;
+  }
+  .hero.is-light::after {
+    content: "";
+    position: absolute;
+    inset: 8% auto auto -8%;
+    width: 22rem;
+    height: 22rem;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.10) 0%, rgba(14, 165, 233, 0) 74%);
+    pointer-events: none;
+  }
+  .hero-body {
+    padding: 3.75rem 1.5rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-panel {
+    background: linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.94) 100%);
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: var(--shadow-md);
+    border-radius: 28px;
+    padding: 2.8rem 2.4rem 2.35rem;
+    backdrop-filter: blur(14px);
   }
   .publication-title {
+    font-size: clamp(1.59rem, 3.04vw, 2.5rem) !important;
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.08;
+    margin-bottom: 1rem !important;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  .publication-title .lang-en {
+    background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 54%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .publication-title .lang-zh {
+    color: #0f172a;
   }
   .publication-authors {
-    margin-top: 1.25rem;
-    color: #444;
+    margin-top: 1.35rem;
+    color: var(--text-soft);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.65rem;
   }
   .publication-authors .author-block {
-    margin: 0 8px;
+    margin: 0;
+    padding: 0.58rem 1rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+    transition: var(--transition);
+  }
+  .publication-authors .author-block:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.10);
+  }
+  .publication-authors a {
+    color: var(--accent);
+    font-weight: 600;
   }
   .publication-affiliations {
-    color: #666;
-    font-style: italic;
-    font-size: 0.95rem;
-    margin-top: 0.4rem;
+    color: var(--text-faint);
+    font-size: 0.98rem;
+    margin-top: 0.9rem;
+    line-height: 1.7;
   }
   .publication-links {
-    margin-top: 1.6rem;
+    margin-top: 1.8rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
   }
   .publication-links .external-link {
-    margin: 0 4px;
+    margin: 0;
   }
   .button.is-rounded {
-    border-radius: 9999px;
-    padding: 0 22px;
+    border-radius: 14px;
+    padding: 0 1.15rem;
+    height: 3rem;
   }
   .button.is-dark {
-    background: #1f2328;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
     color: #fff;
+    border: none;
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.22);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
   }
-  .button.is-dark:hover { background: #000; }
+  .button.is-dark::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.20) 50%, transparent 80%);
+    transform: translateX(-120%);
+    transition: transform 0.55s ease;
+  }
+  .button.is-dark:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(37, 99, 235, 0.28);
+  }
+  .button.is-dark:hover::before {
+    transform: translateX(120%);
+  }
+  .button .icon {
+    font-size: 1rem;
+  }
+  .button.is-dark > * {
+    position: relative;
+    z-index: 1;
+  }
+  .project-nav {
+    position: fixed;
+    top: 0.95rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    margin-top: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.7rem;
+    background: rgba(255,255,255,0.76);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 999px;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.10);
+    backdrop-filter: blur(14px);
+    width: max-content;
+    max-width: calc(100vw - 1.25rem);
+  }
+  .project-nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.3rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    color: var(--text-soft);
+    background: transparent;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: var(--transition);
+    box-shadow: none;
+  }
+  .project-nav-link:hover {
+    color: var(--accent);
+    background: rgba(255,255,255,0.88);
+    border-color: rgba(37, 99, 235, 0.24);
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+  .section-surface {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--shadow-sm);
+    padding: 2.4rem clamp(1.25rem, 3vw, 2.5rem) 2.6rem;
+    backdrop-filter: blur(10px);
+  }
   .section-title {
     text-align: center;
-    margin-bottom: 1.6rem !important;
-    font-family: 'Google Sans', sans-serif;
+    margin-bottom: 2rem !important;
+    position: relative;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 88px;
+    height: 4px;
+    margin: 0.8rem auto 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.18);
   }
   .stat-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin: 1.2rem 0 1.6rem;
+    gap: 16px;
+    margin: 1.7rem 0 0.2rem;
   }
   @media (max-width: 720px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
   .stat {
-    border: 1px solid #e6e6e6;
-    background: #fafbfc;
-    border-radius: 8px;
-    padding: 16px 12px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+    border-radius: 18px;
+    padding: 1.15rem 1rem;
     text-align: center;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+    transition: var(--transition);
+  }
+  .stat:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px rgba(37, 99, 235, 0.10);
   }
   .stat .num {
-    font-size: 26px;
+    font-size: 2rem;
     font-weight: 800;
     color: var(--accent);
-    font-family: 'Google Sans', sans-serif;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
   }
   .stat .label {
-    font-size: 13px;
-    color: #666;
-    margin-top: 4px;
+    font-size: 0.84rem;
+    color: var(--text-faint);
+    margin-top: 0.35rem;
+    line-height: 1.45;
   }
   .figure-block {
-    margin: 1.4rem auto 1.6rem;
+    margin: 1.5rem auto 1.8rem;
     text-align: center;
+    padding: 1.1rem 1.1rem 1rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,251,255,0.96) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 22px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+    transition: var(--transition);
+  }
+  .figure-block:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 52px rgba(15, 23, 42, 0.09);
   }
   .figure-block img {
     max-width: 100%;
     height: auto;
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .figure-block:hover img {
+    transform: scale(1.01);
+    box-shadow: 0 22px 48px rgba(15, 23, 42, 0.12);
   }
   .figure-block .caption {
-    color: #555;
-    font-size: 0.9rem;
-    margin-top: 0.6rem;
+    color: var(--text-faint);
+    font-size: 0.93rem;
+    margin-top: 0.9rem;
     font-style: italic;
     max-width: 760px;
     margin-left: auto;
     margin-right: auto;
+    line-height: 1.6;
   }
   .columns.figure-row {
-    margin-top: 0.8rem;
+    margin-top: 0.35rem;
   }
   .content h2.section-title {
     border-bottom: none;
   }
+  .content {
+    color: var(--text-soft);
+  }
+  .content p,
+  .content li {
+    line-height: 1.82;
+    font-size: 1rem;
+  }
+  .content strong {
+    color: var(--text);
+  }
   .content h3 {
-    font-family: 'Google Sans', sans-serif;
-    margin-top: 1.6em;
+    margin-top: 1.7em;
+    margin-bottom: 0.85rem;
+    font-size: 1.32rem;
+    color: var(--text);
+  }
+  .title.is-5 {
+    margin-top: 0.4rem;
+    margin-bottom: 0.65rem !important;
+    color: var(--text);
+  }
+  .content ol {
+    margin-left: 1.1rem;
+  }
+  .content ol li {
+    margin-bottom: 0.85rem;
+    padding-left: 0.3rem;
+  }
+  code {
+    color: #1d4ed8;
+    background: rgba(37, 99, 235, 0.08);
+    padding: 0.12rem 0.38rem;
+    border-radius: 7px;
+    font-size: 0.92em;
+  }
+  pre code,
+  .pre-checkpoint code,
+  .bibtex-block code {
+    color: inherit;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
   }
   .bibtex-block {
-    background: #f6f8fa;
-    border: 1px solid #e6e6e6;
-    border-radius: 6px;
-    padding: 16px 18px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid rgba(15, 23, 42, 0.28);
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
     overflow-x: auto;
     font-size: 0.85rem;
     line-height: 1.55;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
   }
   .pre-checkpoint {
-    background: #f6f8fa;
-    border: 1px solid #e6e6e6;
-    border-radius: 6px;
-    padding: 12px 16px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid rgba(15, 23, 42, 0.28);
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
     overflow-x: auto;
     font-size: 0.85rem;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
   }
-  .table th, .table td { vertical-align: middle; }
-  .table thead th { background: #fafbfc; }
+  .table {
+    overflow: hidden;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+  }
+  .table th, .table td {
+    vertical-align: middle;
+    border-color: rgba(148, 163, 184, 0.14);
+  }
+  .table thead th {
+    background: linear-gradient(180deg, #f8fbff 0%, #f2f7ff 100%);
+    color: var(--text);
+    font-weight: 700;
+  }
+  .table tbody tr:hover {
+    background: rgba(37, 99, 235, 0.03);
+  }
   footer.footer {
-    background: #fafbfc;
-    border-top: 1px solid #e6e6e6;
-    padding: 2rem 1.5rem;
-    color: #666;
-    font-size: 0.85rem;
+    background: linear-gradient(180deg, #f7fbff 0%, #eef4fb 100%);
+    border-top: 1px solid rgba(148, 163, 184, 0.18);
+    padding: 2.3rem 1.5rem;
+    color: var(--text-faint);
+    font-size: 0.9rem;
   }
-  .footer .content { text-align: center; }
-  a { color: var(--accent); }
+  .footer .content {
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  a {
+    color: var(--accent);
+    transition: color 0.2s ease;
+  }
+  a:hover {
+    color: #1d4ed8;
+  }
   blockquote {
-    background: var(--accent-soft);
+    background: linear-gradient(135deg, #f5f9ff 0%, #eef6ff 100%);
     border-left: 4px solid var(--accent);
-    padding: 12px 16px;
+    padding: 1rem 1.1rem;
     margin: 1.2em 0;
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  }
+
+  /* ---------- Bilingual support ----------
+     Default: English visible, Chinese hidden.
+     The body uses a data-lang attribute (NOT a class) to drive the toggle
+     so it can never collide with the .lang-en / .lang-zh span class names
+     that live on real translatable elements. */
+  .lang-zh { display: none; }
+  body[data-lang="zh"] .lang-en { display: none; }
+  body[data-lang="zh"] .lang-zh { display: revert; }
+
+  /* Language toggle pill */
+  .lang-toggle {
+    display: inline-flex;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 999px;
+    overflow: hidden;
+    font-size: 13px;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    margin-top: 0;
+    user-select: none;
+    box-shadow: none;
+    flex: 0 0 auto;
+  }
+  .lang-toggle button {
+    background: transparent;
+    color: var(--text);
+    border: none;
+    padding: 0.42rem 0.95rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
+  }
+  .lang-toggle button.active {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: #fff;
+  }
+  .lang-toggle button:not(.active):hover {
+    background: rgba(255,255,255,0.88);
+    transform: translateY(-1px);
+  }
+
+  /* Use Noto Sans SC for Chinese rendering when available */
+  body[data-lang="zh"],
+  body[data-lang="zh"] .title.is-1,
+  body[data-lang="zh"] .title.is-2,
+  body[data-lang="zh"] .title.is-3,
+  body[data-lang="zh"] .publication-title,
+  body[data-lang="zh"] .title.is-5,
+  body[data-lang="zh"] .content h3 {
+    font-family: 'Noto Sans SC', 'Noto Sans', 'PingFang SC',
+                 'Microsoft YaHei', sans-serif;
+  }
+  body[data-lang="zh"] .publication-title {
+    letter-spacing: 0;
+  }
+  .stage-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(248,251,255,0.96) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 22px;
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.05);
+    padding: 1.35rem 1.35rem 1.1rem;
+  }
+  .stage-card .figure-block {
+    margin-bottom: 0.2rem;
+  }
+  .section-teaser .container {
+    max-width: 1120px;
+  }
+  .teaser-figure {
+    padding: 1.2rem 1.2rem 1rem;
+    border-radius: 26px;
+  }
+  .teaser-figure .caption {
+    max-width: 900px;
+  }
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .hero-panel,
+  .section-surface,
+  .figure-block {
+    animation: fadeUp 0.65s ease-out both;
+  }
+  @media (max-width: 1023px) {
+    .hero-panel {
+      padding: 2.25rem 1.35rem 2rem;
+      border-radius: 22px;
+    }
+    .section-surface {
+      padding: 2rem 1.1rem 2.15rem;
+      border-radius: 24px;
+    }
+  }
+  @media (max-width: 768px) {
+    .hero-body {
+      padding: 2.8rem 1rem 2rem;
+    }
+    .publication-title {
+      font-size: clamp(1.26rem, 5.06vw, 1.83rem) !important;
+    }
+    .publication-links,
+    .project-nav {
+      gap: 0.6rem;
+    }
+    .project-nav {
+      top: 0.6rem;
+      padding: 0.45rem 0.5rem;
+      justify-content: flex-start;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .project-nav::-webkit-scrollbar {
+      display: none;
+    }
+    .lang-toggle {
+      margin-left: 0.1rem;
+    }
+    .button.is-rounded {
+      width: 100%;
+      justify-content: center;
+    }
+    .publication-links .link-block {
+      width: 100%;
+    }
+    .stat-row {
+      grid-template-columns: 1fr 1fr;
+    }
+    .figure-block {
+      padding: 0.85rem 0.85rem 0.9rem;
+      border-radius: 18px;
+    }
+    .stage-card {
+      padding: 1.1rem 1rem 0.9rem;
+    }
+    .stage-card.column {
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
+    }
+  }
+  @media (max-width: 520px) {
+    .section {
+      padding-left: 0.85rem;
+      padding-right: 0.85rem;
+    }
+    .publication-authors .author-block {
+      width: 100%;
+    }
+    .stat-row {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
+
+<!-- Chinese-friendly font (only loaded once; no impact on EN view) -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
 </head>
-<body>
+<body data-lang="en">
+
+<div class="project-nav" aria-label="Section navigation">
+  <a class="project-nav-link" href="#introduction"><span class="lang-en">Overview</span><span class="lang-zh">概览</span></a>
+  <a class="project-nav-link" href="#method"><span class="lang-en">Method</span><span class="lang-zh">方法</span></a>
+  <a class="project-nav-link" href="#results"><span class="lang-en">Results</span><span class="lang-zh">结果</span></a>
+  <a class="project-nav-link" href="#checkpoints"><span class="lang-en">Checkpoints</span><span class="lang-zh">权重</span></a>
+  <a class="project-nav-link" href="#bibtex"><span class="lang-en">Citation</span><span class="lang-zh">引用</span></a>
+  <div class="lang-toggle" role="group" aria-label="Language">
+    <button type="button" id="lang-btn-en" class="active" onclick="setLang('en')">EN</button>
+    <button type="button" id="lang-btn-zh" onclick="setLang('zh')">中文</button>
+  </div>
+</div>
 
 <!-- ============================== HERO ============================== -->
 <section class="hero is-light">
   <div class="hero-body">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
-        <div class="column has-text-centered">
+        <div class="column has-text-centered hero-panel">
 
           <h1 class="title is-2 publication-title">
-            Q-Zoom: Query-Aware Adaptive Perception<br>
-            for Efficient Multimodal Large Language Models
+            <span class="lang-en">
+              Q-Zoom: Query-Aware Adaptive Perception<br>
+              for Efficient Multimodal Large Language Models
+            </span>
+            <span class="lang-zh">
+              Q-Zoom：面向高效多模态大模型的<br>查询感知自适应视觉框架
+            </span>
           </h1>
 
           <div class="publication-authors">
@@ -199,11 +664,20 @@
           </div>
 
           <div class="publication-affiliations">
-            <sup>1</sup>The University of Sydney &nbsp;·&nbsp;
-            <sup>2</sup>Sun Yat-sen University &nbsp;·&nbsp;
-            <sup>3</sup>City University of Hong Kong
-            <br>
-            <span style="font-size: 0.85rem;">✉ Corresponding author</span>
+            <span class="lang-en">
+              <sup>1</sup>The University of Sydney &nbsp;·&nbsp;
+              <sup>2</sup>Sun Yat-sen University &nbsp;·&nbsp;
+              <sup>3</sup>City University of Hong Kong
+              <br>
+              <span style="font-size: 0.85rem;">✉ Corresponding author</span>
+            </span>
+            <span class="lang-zh">
+              <sup>1</sup>悉尼大学 &nbsp;·&nbsp;
+              <sup>2</sup>中山大学 &nbsp;·&nbsp;
+              <sup>3</sup>香港城市大学
+              <br>
+              <span style="font-size: 0.85rem;">✉ 通讯作者</span>
+            </span>
           </div>
 
           <div class="publication-links">
@@ -216,19 +690,19 @@
             <span class="link-block">
               <a href="https://github.com/YuHengsss/Q-Zoom" class="external-link button is-normal is-rounded is-dark">
                 <span class="icon"><i class="fab fa-github"></i></span>
-                <span>Code</span>
+                <span><span class="lang-en">Code</span><span class="lang-zh">代码</span></span>
               </a>
             </span>
             <span class="link-block">
               <a href="https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-7B" class="external-link button is-normal is-rounded is-dark">
                 <span class="icon">🤗</span>
-                <span>Models</span>
+                <span><span class="lang-en">Models</span><span class="lang-zh">模型</span></span>
               </a>
             </span>
             <span class="link-block">
               <a href="https://huggingface.co/datasets/YuhengSSS/Q-Zoom-Training" class="external-link button is-normal is-rounded is-dark">
                 <span class="icon">📦</span>
-                <span>Training Data</span>
+                <span><span class="lang-en">Training Data</span><span class="lang-zh">训练数据</span></span>
               </a>
             </span>
           </div>
@@ -240,14 +714,21 @@
 </section>
 
 <!-- ============================== TEASER ============================== -->
-<section class="section" style="padding-top: 2rem;">
+<section class="section section-teaser" style="padding-top: 2rem;">
   <div class="container is-max-desktop">
-    <div class="figure-block">
+    <div class="figure-block teaser-figure">
       <img src="assets/paradigm_comparison.png" alt="Q-Zoom vs training-tree and RL paradigms">
       <p class="caption">
-        Compared to training-tree-based detail-zoom methods (e.g. ViCrop, 4.2 s) and RL-supervised
-        tool-use methods (e.g. Thyme, 15.9 s), <strong>Q-Zoom</strong> answers the same question
-        with a single forward pass plus an optional ROI re-decode — at <strong>1.4 s</strong>.
+        <span class="lang-en">
+          Compared to training-tree-based detail-zoom methods (e.g. ViCrop, 4.2 s) and RL-supervised
+          tool-use methods (e.g. Thyme, 15.9 s), <strong>Q-Zoom</strong> answers the same question
+          with a single forward pass plus an optional ROI re-decode — at <strong>1.4 s</strong>.
+        </span>
+        <span class="lang-zh">
+          相比基于训练树的细节缩放方法（如 ViCrop，4.2 秒）和基于强化学习的工具调用方法
+          （如 Thyme，15.9 秒），<strong>Q-Zoom</strong> 只需一次前向传播，并在需要时额外进行一次
+          RoI 重解码，就能回答同样的问题，总耗时仅为 <strong>1.4 秒</strong>。
+        </span>
       </p>
     </div>
   </div>
@@ -255,11 +736,13 @@
 
 <!-- ============================== INTRODUCTION ============================== -->
 <section class="section" id="introduction" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
+  <div class="container is-max-desktop section-surface">
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3 section-title">Introduction</h2>
-        <div class="content">
+        <h2 class="title is-3 section-title">
+          <span class="lang-en">Introduction</span><span class="lang-zh">简介</span>
+        </h2>
+        <div class="content lang-en">
           <p>
             <strong>Q-Zoom</strong> is a query-aware adaptive perception framework that lets a
             Multimodal LLM look at high resolution <em>only when it needs to, and only where it
@@ -300,19 +783,78 @@
             matched accuracy, and when configured for maximum fidelity it surpasses the
             baseline's peak by <strong>+1.1%</strong> and <strong>+8.1%</strong> respectively.
             The recipe transfers seamlessly to Qwen3-VL, LLaVA-1.5, and emerging RL-based
-            thinking-with-image models — Q-Zoom is, to our knowledge, the first
-            architecture-agnostic adaptive-perception framework that delivers both throughput
-            <em>and</em> accuracy gains across this many backbones.
+            thinking-with-image models.
+          </p>
+        </div>
+
+        <div class="content lang-zh">
+          <p>
+            <strong>Q-Zoom</strong> 是一种查询感知的自适应视觉感知框架，使多模态大模型
+            <em>只在真正需要时、也只在真正相关的区域</em>进行高分辨率观察，而且无需改动底层骨干网络。
+            它不再把冗余的高分辨率视觉 token 一股脑送入具有二次复杂度的自注意力模块，
+            而是在现成的 MLLM 之上增添两个轻量模块，以由粗到细的方式完成推理：
+          </p>
+
+          <ol>
+            <li>
+              <strong>动态门控网络（Dynamic Gating Network）。</strong>一个轻量头会根据查询判断，
+              粗粒度的全局结果是否已经足够；只有困难样本才会被送入高分辨率细化流程。
+              路由标签来自一种<em>一致性感知</em>的样本生成策略，会在进行 BCE 监督前
+              剔除不稳定或相互矛盾的样本。
+            </li>
+            <li>
+              <strong>自蒸馏区域提议网络（SD-RPN）。</strong>当确实需要细节时，SD-RPN 会直接
+              在 MLLM 自身的中间特征空间中定位与任务相关的感兴趣区域（RoI），
+              整个过程完全自监督，无需外部检测器，也不需要额外标注。随后，模型会对裁剪区域重新解码，
+              并通过连续的时空对齐机制和针对性的后续 SFT，与粗粒度的全局布局信息进行融合。
+            </li>
+            <li>
+              <strong>单次前向的粗到细推理。</strong>测试时，Q-Zoom 会先基于低分辨率输入给出直接响应；
+              门控头再按样本决定是否额外生成基于 RoI 的响应。两路结果在同一条前向路径中完成融合，
+              无需树搜索、无需强化学习 rollout，也无需外部工具调用。
+            </li>
+          </ol>
+
+          <p>
+            这三个组件共同让 Q-Zoom 建立起显著占优的<strong>帕累托前沿</strong>：在
+            Qwen2.5-VL-7B 上，在精度相当的前提下，它在 Doc/OCR 基准上可提速 <strong>2.52 倍</strong>，
+            在高分辨率基准上可提速 <strong>4.39 倍</strong>；当配置为最高保真模式时，又分别比基线峰值
+            高出 <strong>+1.1%</strong> 和 <strong>+8.1%</strong>。这一方案还能无缝迁移到
+            Qwen3-VL、LLaVA-1.5，以及新兴的基于强化学习的图像思考类模型。
           </p>
         </div>
       </div>
     </div>
 
     <div class="stat-row">
-      <div class="stat"><div class="num">2.52×</div><div class="label">Doc/OCR speedup<br>(Qwen2.5-VL-7B)</div></div>
-      <div class="stat"><div class="num">4.39×</div><div class="label">High-res speedup<br>(Qwen2.5-VL-7B)</div></div>
-      <div class="stat"><div class="num">+1.1%</div><div class="label">Doc/OCR over baseline peak</div></div>
-      <div class="stat"><div class="num">+8.1%</div><div class="label">High-res over baseline peak</div></div>
+      <div class="stat">
+        <div class="num">2.52×</div>
+        <div class="label">
+          <span class="lang-en">Doc/OCR speedup<br>(Qwen2.5-VL-7B)</span>
+          <span class="lang-zh">Doc/OCR 提速<br>(Qwen2.5-VL-7B)</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="num">4.39×</div>
+        <div class="label">
+          <span class="lang-en">High-res speedup<br>(Qwen2.5-VL-7B)</span>
+          <span class="lang-zh">高分辨率任务提速<br>(Qwen2.5-VL-7B)</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="num">+1.1%</div>
+        <div class="label">
+          <span class="lang-en">Doc/OCR over baseline peak</span>
+          <span class="lang-zh">Doc/OCR 超过基线峰值</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="num">+8.1%</div>
+        <div class="label">
+          <span class="lang-en">High-res over baseline peak</span>
+          <span class="lang-zh">高分辨率超越基线峰值</span>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -320,15 +862,24 @@
 
 <!-- ============================== METHOD ============================== -->
 <section class="section" id="method">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title">Method</h2>
+  <div class="container is-max-desktop section-surface">
+    <h2 class="title is-3 section-title">
+      <span class="lang-en">Method</span><span class="lang-zh">方法</span>
+    </h2>
 
     <div class="content">
-      <h3>Inference: gated two-pass decoding</h3>
-      <p>
+      <h3>
+        <span class="lang-en">Inference: gated two-pass decoding</span>
+        <span class="lang-zh">推理：门控双阶段解码</span>
+      </h3>
+      <p class="lang-en">
         At inference, Q-Zoom always emits a <em>direct response</em> from the low-resolution
         pass; the high-res gating head decides per sample whether to also emit a <em>RoI-based
         response</em> by re-decoding the cropped region predicted by SD-RPN.
+      </p>
+      <p class="lang-zh">
+        推理时，Q-Zoom 会先基于低分辨率输入生成<em>直接响应</em>；随后由高分辨率门控头按样本判断，
+        是否需要对 SD-RPN 预测出的裁剪区域重新解码，从而生成额外的<em>基于 RoI 的响应</em>。
       </p>
     </div>
     <div class="figure-block">
@@ -336,19 +887,33 @@
     </div>
 
     <div class="content">
-      <h3>Three-stage training pipeline</h3>
-      <p>
+      <h3>
+        <span class="lang-en">Three-stage training pipeline</span>
+        <span class="lang-zh">三阶段训练流程</span>
+      </h3>
+      <p class="lang-en">
         Each stage trains a <strong>different subset</strong> of parameters while everything
         else stays frozen:
+      </p>
+      <p class="lang-zh">
+        每个阶段只训练<strong>不同的一部分参数</strong>，其余参数全部保持冻结：
       </p>
     </div>
 
     <div class="content">
-      <h4 class="title is-5">Stage 1 — SD-RPN initialization</h4>
-      <p>
+      <h4 class="title is-5">
+            <span class="lang-en">Stage 1 — SD-RPN initialization</span>
+            <span class="lang-zh">阶段 1：SD-RPN 初始化</span>
+          </h4>
+      <p class="lang-en">
         Train only the <code>twig_T</code> twig layers (the gating branch grafted on top of base
         layer <code>twig_K</code>) using pseudo ROI maps generated by the base VLM. The base LLM,
         <code>lm_head</code>, and vision encoder all stay frozen.
+      </p>
+      <p class="lang-zh">
+        仅训练 <code>twig_T</code> 个 twig 层（即接在第 <code>twig_K</code> 层之上的 twig 分支）；
+        监督信号来自基础 VLM 自行生成的伪 RoI 注意力图。基础 LLM、<code>lm_head</code> 和
+        视觉编码器均保持冻结。
       </p>
     </div>
     <div class="figure-block">
@@ -356,14 +921,22 @@
     </div>
 
     <div class="columns is-centered" style="align-items: stretch;">
-      <div class="column" style="flex: 0 0 36%; max-width: 36%;">
+      <div class="column stage-card" style="flex: 0 0 36%; max-width: 36%;">
         <div class="content">
-          <h4 class="title is-5">Stage 2 — Targeted post-SFT</h4>
-          <p>
+          <h4 class="title is-5">
+            <span class="lang-en">Stage 2 — Targeted post-SFT</span>
+            <span class="lang-zh">阶段 2：针对性后续 SFT</span>
+          </h4>
+          <p class="lang-en">
             The frozen TWIG branch is carried over from Stage 1; only the LLM decoder +
             <code>lm_head</code> are trained on a hard-sample mixture mined by an
             LLM-as-a-Judge that compares the direct response against the RoI response on
             a fresh question pool.
+          </p>
+          <p class="lang-zh">
+            沿用并冻结阶段 1 得到的 TWIG 分支；只在由 LLM-as-a-Judge 从新问题池中挖掘出的
+            困难样本混合集上，训练 LLM 解码器和 <code>lm_head</code>。这些困难样本来自
+            对直接响应与基于 RoI 的响应的比较结果。
           </p>
         </div>
         <div class="figure-block">
@@ -371,15 +944,23 @@
         </div>
       </div>
 
-      <div class="column" style="flex: 0 0 60%; max-width: 60%;">
+      <div class="column stage-card" style="flex: 0 0 60%; max-width: 60%;">
         <div class="content">
-          <h4 class="title is-5">Stage 3 — Dynamic Gating Network</h4>
-          <p>
+          <h4 class="title is-5">
+            <span class="lang-en">Stage 3 — Dynamic Gating Network</span>
+            <span class="lang-zh">阶段 3：动态门控网络</span>
+          </h4>
+          <p class="lang-en">
             Train only the high-res gating network (<code>high_res_layers</code> +
             <code>high_res_head</code>) that decides per input whether to fire the
             high-resolution RoI refinement pass. Stage 3 uses a <em>consistency-aware</em>
             sample-generation pipeline that filters unstable / contradictory examples
             before BCE supervision.
+          </p>
+          <p class="lang-zh">
+            仅训练高分辨率门控网络（<code>high_res_layers</code> + <code>high_res_head</code>），
+            由它决定每个输入是否需要触发高分辨率 RoI 细化流程。阶段 3 采用<em>一致性感知</em>
+            的样本生成流程，会在 BCE 监督前剔除不稳定或相互矛盾的样本。
           </p>
         </div>
         <div class="figure-block">
@@ -392,55 +973,88 @@
 
 <!-- ============================== RESULTS ============================== -->
 <section class="section" id="results" style="background:#fafbfc;">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title">Results</h2>
+  <div class="container is-max-desktop section-surface">
+    <h2 class="title is-3 section-title">
+      <span class="lang-en">Results</span><span class="lang-zh">实验结果</span>
+    </h2>
 
     <div class="content">
-      <h3>Main results</h3>
-      <p>
+      <h3>
+        <span class="lang-en">Main results</span><span class="lang-zh">主要结果</span>
+      </h3>
+      <p class="lang-en">
         Q-Zoom is competitive with — and often surpasses — recent
         detail-zoom and tool-use baselines across <strong>five</strong> backbones
-        (LLaVA-1.5-7B/13B, Qwen2.5-VL-3B/7B, Qwen3-VL-4B). It is the only
-        method whose throughput stays close to the vanilla model (≈0.6–0.9× of
-        baseline) while still posting the best average score in every block.
+        (LLaVA-1.5-7B/13B, Qwen2.5-VL-3B/7B, Qwen3-VL-4B).
+      </p>
+      <p class="lang-zh">
+        Q-Zoom 在<strong>五种</strong>骨干网络（LLaVA-1.5-7B/13B、Qwen2.5-VL-3B/7B、
+        Qwen3-VL-4B）上，与近期的细节缩放和工具调用基线相比均具竞争力，而且多数情况下更优。
       </p>
     </div>
 
     <div class="figure-block">
       <img src="assets/main_results_doc_ocr.png" alt="Main results: Document &amp; OCR benchmarks">
       <p class="caption">
-        <strong>Performance on Document &amp; OCR benchmarks.</strong>
-        Dataset subscripts denote the evaluation split. Performance
-        subscripts show the absolute improvement (↑) over the baseline.
-        Throughput is relative to the baseline, measured on a single
-        NVIDIA A6000 GPU, and our results are evaluated under a constraint
-        of <strong>576 maximum visual tokens</strong>.
+        <span class="lang-en">
+          <strong>Performance on Document &amp; OCR benchmarks.</strong>
+          Dataset subscripts denote the evaluation split. Performance
+          subscripts show the absolute improvement (↑) over the baseline.
+          Throughput is relative to the baseline, measured on a single
+          NVIDIA A6000 GPU, and our results are evaluated under a constraint
+          of <strong>576 maximum visual tokens</strong>.
+        </span>
+        <span class="lang-zh">
+          <strong>Document &amp; OCR 基准上的结果。</strong>
+          数据集下标表示评测划分；性能下标表示相对基线的绝对提升（↑）。
+          吞吐量以基线为参照，在单张 NVIDIA A6000 GPU 上测得；
+          所有结果均在<strong>最多 576 个视觉 token</strong>的约束下评测。
+        </span>
       </p>
     </div>
 
     <div class="figure-block">
       <img src="assets/main_results_hr_vision.png" alt="Main results: Vision-Centric and High-Resolution benchmarks">
       <p class="caption">
-        <strong>Performance on Vision-Centric and High-Resolution benchmarks.</strong>
-        Dataset subscripts denote the specific evaluation split; performance
-        subscripts indicate the absolute improvement (↑) of Q-Zoom over the
-        baseline. <strong>Tp</strong> denotes relative inference throughput,
-        and averages are computed exclusively across the four Overall metrics
-        (V* Bench, MME-RW-lite, HR-Bench-4K, HR-Bench-8K). Unless otherwise
-        noted, all Q-Zoom results are evaluated under a constraint of
-        <strong>4,096 maximum visual tokens</strong>. The † symbol marks
-        numbers cited directly from the corresponding original publications.
+        <span class="lang-en">
+          <strong>Performance on Vision-Centric and High-Resolution benchmarks.</strong>
+          Dataset subscripts denote the specific evaluation split; performance
+          subscripts indicate the absolute improvement (↑) of Q-Zoom over the
+          baseline. <strong>Tp</strong> denotes relative inference throughput,
+          and averages are computed exclusively across the four Overall metrics
+          (V* Bench, MME-RW-lite, HR-Bench-4K, HR-Bench-8K). Unless otherwise
+          noted, all Q-Zoom results are evaluated under a constraint of
+          <strong>4,096 maximum visual tokens</strong>. The † symbol marks
+          numbers cited directly from the corresponding original publications.
+        </span>
+        <span class="lang-zh">
+          <strong>视觉中心与高分辨率基准上的结果。</strong>
+          数据集下标表示具体评测划分；性能下标表示 Q-Zoom 相对基线的绝对提升（↑）。
+          <strong>Tp</strong> 表示相对推理吞吐量；平均值只在四项 Overall 指标
+          （V* Bench、MME-RW-lite、HR-Bench-4K、HR-Bench-8K）上计算。除非另有说明，
+          所有 Q-Zoom 结果均在<strong>最多 4,096 个视觉 token</strong>的约束下评测。
+          † 表示直接引自对应原始论文的数值。
+        </span>
       </p>
     </div>
 
     <div class="content">
-      <h3>Accuracy / throughput trade-off</h3>
-      <p>
+      <h3>
+        <span class="lang-en">Accuracy / throughput trade-off</span>
+        <span class="lang-zh">精度 / 吞吐量权衡</span>
+      </h3>
+      <p class="lang-en">
         Sweeping the visual-token budget from 256 to 4096 traces a Pareto curve. Q-Zoom (orange)
         shifts the curve up and to the right of the baseline VLM (gray) on <strong>both</strong>
         Doc/OCR-heavy and high-resolution vision benchmarks: at matched accuracy it is multiple
         times faster, and at matched throughput it lifts average accuracy by several points.
         The trend is consistent across both supported backbones.
+      </p>
+      <p class="lang-zh">
+        将视觉 token 预算从 256 扫描到 4096，可以得到一条帕累托曲线。无论是在 Doc/OCR
+        密集型基准，还是在高分辨率视觉基准上，Q-Zoom（橙色）都把这条曲线整体推到了
+        基线 VLM（灰色）的右上方：在相同精度下可实现数倍提速，在相同吞吐量下又能把平均精度
+        提升数个百分点。这一趋势在两种支持的骨干网络上都保持一致。
       </p>
     </div>
 
@@ -449,13 +1063,19 @@
       <div class="column is-half">
         <div class="figure-block">
           <img src="assets/results_doc_ocr.png" alt="Qwen2.5-VL-7B Doc/OCR Pareto curve">
-          <p class="caption">Doc/OCR — 2.52× speedup at matched accuracy, +1.1% over baseline peak.</p>
+          <p class="caption">
+            <span class="lang-en">Doc/OCR — 2.52× speedup at matched accuracy, +1.1% over baseline peak.</span>
+            <span class="lang-zh">Doc/OCR：在相同精度下提速 2.52×，比基线峰值高 1.1%。</span>
+          </p>
         </div>
       </div>
       <div class="column is-half">
         <div class="figure-block">
           <img src="assets/results_hr.png" alt="Qwen2.5-VL-7B HR Pareto curve">
-          <p class="caption">High-resolution — 4.39× speedup at matched accuracy, +8.1% over baseline peak.</p>
+          <p class="caption">
+            <span class="lang-en">High-resolution — 4.39× speedup at matched accuracy, +8.1% over baseline peak.</span>
+            <span class="lang-zh">高分辨率：在相同精度下提速 4.39×，比基线峰值高 8.1%。</span>
+          </p>
         </div>
       </div>
     </div>
@@ -465,26 +1085,41 @@
       <div class="column is-half">
         <div class="figure-block">
           <img src="assets/results_doc_ocr_q3_4b.png" alt="Qwen3-VL-4B Doc/OCR Pareto curve">
-          <p class="caption">Doc/OCR — 1.70× speedup at matched accuracy, 53.1% visual-token reduction.</p>
+          <p class="caption">
+            <span class="lang-en">Doc/OCR — 1.70× speedup at matched accuracy, 53.1% visual-token reduction.</span>
+            <span class="lang-zh">Doc/OCR：在相同精度下提速 1.70×，视觉 token 数减少 53.1%。</span>
+          </p>
         </div>
       </div>
       <div class="column is-half">
         <div class="figure-block">
           <img src="assets/results_hr_q3_4b.png" alt="Qwen3-VL-4B HR Pareto curve">
-          <p class="caption">High-resolution — 2.73× speedup at matched accuracy, 72.9% visual-token reduction.</p>
+          <p class="caption">
+            <span class="lang-en">High-resolution — 2.73× speedup at matched accuracy, 72.9% visual-token reduction.</span>
+            <span class="lang-zh">高分辨率：在相同精度下提速 2.73×，视觉 token 数减少 72.9%。</span>
+          </p>
         </div>
       </div>
     </div>
 
     <div class="content">
-      <h3>Qualitative examples</h3>
+      <h3>
+        <span class="lang-en">Qualitative examples</span>
+        <span class="lang-zh">定性示例</span>
+      </h3>
     </div>
     <div class="figure-block">
       <img src="assets/qualitative_examples.png" alt="Q-Zoom qualitative examples with RoI heatmap">
       <p class="caption">
-        SD-RPN produces a per-token attention map (middle column) that isolates the region the
-        question is actually about. The model then re-decodes only that region to recover the
-        correct answer.
+        <span class="lang-en">
+          SD-RPN produces a per-token attention map (middle column) that isolates the region the
+          question is actually about. The model then re-decodes only that region to recover the
+          correct answer.
+        </span>
+        <span class="lang-zh">
+          SD-RPN 会生成逐 token 的注意力图（中间列），定位出问题真正关注的区域；
+          模型随后只对该区域重新解码，即可恢复正确答案。
+        </span>
       </p>
     </div>
   </div>
@@ -492,16 +1127,24 @@
 
 <!-- ============================== CHECKPOINTS ============================== -->
 <section class="section" id="checkpoints">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title">Released checkpoints</h2>
+  <div class="container is-max-desktop section-surface">
+    <h2 class="title is-3 section-title">
+      <span class="lang-en">Released checkpoints</span>
+      <span class="lang-zh">已发布模型权重</span>
+    </h2>
 
     <div class="content">
-      <p>The final Stage-3 weights are on Hugging Face for all three supported backbones.</p>
+      <p class="lang-en">The final Stage-3 weights are on Hugging Face for all three supported backbones.</p>
+      <p class="lang-zh">三种已支持骨干网络的最终 Stage-3 权重均已发布到 Hugging Face。</p>
     </div>
 
     <table class="table is-fullwidth is-striped">
       <thead>
-        <tr><th>Backbone</th><th>HF model</th><th class="has-text-centered">TWIG config</th></tr>
+        <tr>
+          <th><span class="lang-en">Backbone</span><span class="lang-zh">骨干模型</span></th>
+          <th><span class="lang-en">HF model</span><span class="lang-zh">Hugging Face 模型</span></th>
+          <th class="has-text-centered"><span class="lang-en">TWIG config</span><span class="lang-zh">TWIG 配置</span></th>
+        </tr>
       </thead>
       <tbody>
         <tr>
@@ -533,8 +1176,10 @@ CHECKPOINT_PATH=./checkpoints/Q-Zoom-Qwen2.5VL-7B \
 
 <!-- ============================== BIBTEX ============================== -->
 <section class="section" id="bibtex" style="background:#fafbfc;">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title">BibTeX</h2>
+  <div class="container is-max-desktop section-surface">
+    <h2 class="title is-3 section-title">
+      <span class="lang-en">BibTeX</span><span class="lang-zh">引用 (BibTeX)</span>
+    </h2>
 <pre class="bibtex-block"><code>@article{qzoom,
   title  = {Q-Zoom: Query-Aware Adaptive Perception for Efficient
             Multimodal Large Language Models},
@@ -544,8 +1189,14 @@ CHECKPOINT_PATH=./checkpoints/Q-Zoom-Qwen2.5VL-7B \
 }</code></pre>
 
     <p style="margin-top: 1.4rem; color: #555;">
-      You may also be interested in our earlier work that introduced the self-distilled RoI
-      predictor used by Q-Zoom's SD-RPN branch:
+      <span class="lang-en">
+        You may also be interested in our earlier work that introduced the self-distilled RoI
+        predictor used by Q-Zoom's SD-RPN branch:
+      </span>
+      <span class="lang-zh">
+        您也许会对我们更早的一项工作感兴趣；该工作首次提出了 Q-Zoom 的 SD-RPN 分支所采用的
+        自蒸馏 RoI 预测器：
+      </span>
     </p>
 <pre class="bibtex-block"><code>@article{shi2025catching,
   title  = {Catching the Details: Self-Distilled RoI Predictors for
@@ -560,18 +1211,58 @@ CHECKPOINT_PATH=./checkpoints/Q-Zoom-Qwen2.5VL-7B \
 <!-- ============================== FOOTER ============================== -->
 <footer class="footer">
   <div class="content">
-    <p>
+    <p class="lang-en">
       This page is part of the <a href="https://github.com/YuHengsss/Q-Zoom">Q-Zoom GitHub release</a>
       (Apache 2.0). Built on top of
       <a href="https://github.com/QwenLM/Qwen2.5-VL">Qwen2.5-VL</a> and
       <a href="https://github.com/EvolvingLMMs-Lab/lmms-eval">lmms-eval</a>.
     </p>
+    <p class="lang-zh">
+      本页面属于 <a href="https://github.com/YuHengsss/Q-Zoom">Q-Zoom 的 GitHub 发布内容</a>
+      （Apache 2.0），基于
+      <a href="https://github.com/QwenLM/Qwen2.5-VL">Qwen2.5-VL</a> 和
+      <a href="https://github.com/EvolvingLMMs-Lab/lmms-eval">lmms-eval</a> 构建。
+    </p>
     <p style="margin-top: 0.4rem;">
-      Page template adapted from the <a href="https://nerfies.github.io/">Nerfies</a> academic
-      project page (Bulma CSS).
+      <span class="lang-en">
+        Page template adapted from the <a href="https://nerfies.github.io/">Nerfies</a> academic
+        project page (Bulma CSS), with additional style inspiration from
+        <a href="https://memagent-sialab.github.io/">MemAgent</a>.
+      </span>
+      <span class="lang-zh">
+        页面模板改编自 <a href="https://nerfies.github.io/">Nerfies</a> 学术项目主页
+        （基于 Bulma CSS），并额外参考了
+        <a href="https://memagent-sialab.github.io/">MemAgent</a> 的页面设计。
+      </span>
     </p>
   </div>
 </footer>
+
+<!-- ============================== LANGUAGE TOGGLE JS ============================== -->
+<script>
+  (function () {
+    function setLang(lang) {
+      if (lang !== 'en' && lang !== 'zh') lang = 'en';
+      document.body.setAttribute('data-lang', lang);
+      document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
+      var btnEn = document.getElementById('lang-btn-en');
+      var btnZh = document.getElementById('lang-btn-zh');
+      if (btnEn && btnZh) {
+        btnEn.classList.toggle('active', lang === 'en');
+        btnZh.classList.toggle('active', lang === 'zh');
+      }
+      try { localStorage.setItem('qzoom-lang', lang); } catch (e) { /* ignore */ }
+    }
+
+    // Expose for inline onclick handlers
+    window.setLang = setLang;
+
+    // Restore from localStorage on first paint
+    var saved = 'en';
+    try { saved = localStorage.getItem('qzoom-lang') || 'en'; } catch (e) { /* ignore */ }
+    setLang(saved);
+  })();
+</script>
 
 </body>
 </html>
