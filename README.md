@@ -310,9 +310,23 @@ If you use Q-Zoom in your research, please cite our paper:
 
 ```bibtex
 @article{qzoom,
-  title  = {Q-Zoom: Gated Region-of-Interest for Vision-Language Models},
-  author = {<author list>},
+  title  = {Q-Zoom: Query-Aware Adaptive Perception for Efficient
+            Multimodal Large Language Models},
+  author = {Shi, Yuheng and Dong, Minjing and Xu, Chang},
   year   = {2026}
+}
+```
+
+You may also be interested in our earlier work that introduced the
+self-distilled RoI predictor used by Q-Zoom's SD-RPN branch:
+
+```bibtex
+@article{shi2025catching,
+  title  = {Catching the Details: Self-Distilled RoI Predictors for
+            Fine-Grained MLLM Perception},
+  author = {Shi, Yuheng and Pei, Xiaohuan and Dong, Minjing and Xu, Chang},
+  journal= {arXiv preprint arXiv:2509.16944},
+  year   = {2025}
 }
 ```
 
