@@ -55,4 +55,4 @@ bash run_all.sh
 | `NUM_GPUS` | `4` | torchrun nproc_per_node. |
 
 K/T defaults match the configuration reported in the paper for Qwen2.5-VL-7B
-(K=18, T=3). For Qwen2.5-VL-3B use K=12,T=3; for Qwen3-VL-4B use K=24,T=3.
+(K=18, T=3). For Qwen2.5-VL-3B use K=24,T=3; for Qwen3-VL-4B use K=24,T=3.
