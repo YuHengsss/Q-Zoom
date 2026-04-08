@@ -24,7 +24,7 @@ single forward path.
 On Qwen2.5-VL-7B, Q-Zoom **accelerates inference by 2.52× on Doc/OCR
 benchmarks and 4.39× on high-resolution scenarios** while matching the
 baseline's peak accuracy; configured for maximum perceptual fidelity it
-**surpasses the baseline's peak by +1.1% (Doc/OCR) and +8.4% (HR)**. The
+**surpasses the baseline's peak by +1.1% (Doc/OCR) and +8.1% (HR)**. The
 same recipe transfers seamlessly to Qwen3-VL, LLaVA, and emerging
 RL-based thinking-with-image models.
 
