@@ -1,0 +1,38 @@
+# Core dependencies
+gradio==5.4.0
+gradio_client==1.4.2
+# Pin httpx to gradio's required range (some lmms-eval / openai sub-deps
+# pull in httpx<0.24 which silently breaks gradio at runtime).
+httpx>=0.24.1
+qwen-vl-utils==0.0.11
+transformers-stream-generator==0.0.4
+torch==2.4.0
+torchvision==0.19.0
+# Q-Zoom requires DIFFERENT transformers versions per backbone:
+#   * Qwen2.5-VL  -> transformers==4.51.3   (downgrade after `pip install -r`)
+#   * Qwen3-VL    -> transformers==4.57.1   (default, pinned below)
+# install.sh handles the downgrade automatically when you pass `qwen2_5vl`.
+# NOTE: 4.57.0 was yanked from PyPI; use 4.57.1 instead.
+transformers==4.57.1
+accelerate
+av
+torchcodec==0.1.0
+matplotlib==3.7.3
+
+# Training stack — required for qwen-vl-finetune (Stage 1/2/3 training).
+deepspeed==0.16.0
+
+# flash-attn 2 is required by both the training scripts and the
+# `attn_implementation=flash_attention_2` eval flag. The pip wheel needs
+# nvcc/CUDA_HOME to build from source — install.sh prefers a pre-built
+# wheel from the upstream GitHub release for the recommended
+# (Python 3.10 + torch 2.4 + cu12 + cxx11abiFALSE) configuration. If you
+# install the requirements manually instead of using install.sh, run:
+#   pip install flash-attn==2.7.3 --no-build-isolation
+# after exporting CUDA_HOME=/usr/local/cuda-12.1 (or similar).
+flash-attn==2.7.3
+
+tensorboard
+datasets
+scikit-image
+decord

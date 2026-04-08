@@ -1,0 +1,31 @@
+{
+  "data_root": "PATH_TO_DATA_ROOT",
+  "sources": [
+    {
+      "name": "textvqa",
+      "dataset": "textvqa",
+      "question_file": "${data_root}/textvqa/converted_llava_style_train.jsonl",
+      "image_prefix": "textvqa/train_images"
+    },
+    {
+      "name": "chartqa",
+      "dataset": "chartqa",
+      "question_file": "${data_root}/chartqa_28k_qa.jsonl"
+    },
+    {
+      "name": "visual_cot_infovqa",
+      "dataset": "visual_cot_infovqa",
+      "question_file": "${data_root}/visual_cot_infovqa_subset15k.jsonl"
+    },
+    {
+      "name": "visual_cot_docvqa",
+      "dataset": "visual_cot_docvqa",
+      "question_file": "${data_root}/visual_cot_docvqa_subset33k.jsonl"
+    },
+    {
+      "name": "vstar_coco_spatial",
+      "dataset": "vstar_coco_spatial",
+      "question_file": "${data_root}/vstar_coco_spatial_relation_data.jsonl"
+    }
+  ]
+}

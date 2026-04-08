@@ -1,0 +1,26 @@
+# Local sanity-test scratch — never published
+tests_local/
+logs/
+
+# Training / eval output dirs (per-checkpoint, not source)
+output/
+wandb/
+runs/
+
+# Python / build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.eggs/
+build/
+dist/
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
