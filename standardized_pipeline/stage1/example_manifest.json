@@ -1,0 +1,42 @@
+{
+  "defaults": {
+    "mode": "textual",
+    "short_prompt": true,
+    "use_system_prompt": false,
+    "max_new_tokens": 128
+  },
+  "sources": [
+    {
+      "name": "gqa_natural",
+      "dataset": "gqa",
+      "question_file": "PATH_TO_DATA_ROOT/llava_v1_5_mix665k_selected_qa.jsonl",
+      "filter_substr": "gqa",
+      "mode": "natural",
+      "short_prompt": true,
+      "use_system_prompt": true
+    },
+    {
+      "name": "ocrvqa_textual",
+      "dataset": "ocr_vqa",
+      "question_file": "PATH_TO_DATA_ROOT/llava_v1_5_mix665k_selected_qa.jsonl",
+      "filter_substr": "ocr_vqa",
+      "mode": "textual",
+      "short_prompt": true
+    },
+    {
+      "name": "docvqa_textual",
+      "dataset": "docvqa",
+      "question_file": "PATH_TO_DATA_ROOT/visual_cot_docvqa_subset33k.jsonl",
+      "mode": "textual",
+      "short_prompt": false
+    }
+  ],
+  "example_overrides": [
+    {
+      "question_id": "120396",
+      "dataset": "gqa",
+      "mode": "textual",
+      "short_prompt": false
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "data_root": "PATH_TO_DATA_ROOT",
+  "sources": [
+    {
+      "name": "chartqa28k",
+      "dataset": "chartqa",
+      "question_file": "${data_root}/chartqa_28k_qa.jsonl"
+    },
+    {
+      "name": "vcot_llava68k",
+      "dataset": "visual_cot_llava",
+      "question_file": "${data_root}/visual_cot_llava_subset68k.jsonl"
+    },
+    {
+      "name": "vcot_docvqa33k",
+      "dataset": "visual_cot_docvqa",
+      "question_file": "${data_root}/visual_cot_docvqa_subset33k.jsonl"
+    }
+  ]
+}
