@@ -1,5 +1,17 @@
 # Q-Zoom: Query-Aware Adaptive Perception for Efficient Multimodal Large Language Models
 
+<p align="center">
+  <a href="https://yuhengsss.github.io/Q-Zoom/"><img alt="Project Page" src="https://img.shields.io/badge/🌐%20Project%20Page-yuhengsss.github.io%2FQ--Zoom-1f6feb?style=for-the-badge"></a>
+  &nbsp;
+  <a href="https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-7B"><img alt="HF Models" src="https://img.shields.io/badge/🤗%20Models-YuhengSSS%2FQ--Zoom-yellow?style=for-the-badge"></a>
+  &nbsp;
+  <a href="https://huggingface.co/datasets/YuhengSSS/Q-Zoom-Training"><img alt="HF Dataset" src="https://img.shields.io/badge/📦%20Training%20Data-YuhengSSS%2FQ--Zoom--Training-yellow?style=for-the-badge"></a>
+</p>
+
+> 🌐 **Visit the project page at <https://yuhengsss.github.io/Q-Zoom/>** for an interactive
+> walkthrough — main results tables, accuracy/throughput Pareto curves for both backbones,
+> qualitative examples, and a 中文 toggle.
+
 Q-Zoom is a **query-aware adaptive high-resolution perception framework**
 for Multimodal Large Language Models that operates in an efficient
 coarse-to-fine manner. Instead of indiscriminately flooding the
@@ -236,7 +248,7 @@ response on a fresh question pool, so the LLM adapts to operate under
 Q-Zoom gating.</p>
 
 <p align="center">
-  <img src="assets/stage2_targeted_sft.png" alt="Stage 2 — Targeted Post-SFT mined via LLM-as-a-Judge" width="67%">
+  <img src="assets/stage2_targeted_sft.png" alt="Stage 2 — Targeted Post-SFT mined via LLM-as-a-Judge" width="100%">
 </p>
 
 </td>
