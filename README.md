@@ -192,6 +192,9 @@ baseline VLM (gray) on **both** Doc/OCR-heavy and high-resolution vision
 benchmarks: at matched accuracy it is multiple times faster, and at
 matched throughput it lifts average accuracy by several points.
 
+> **Note:** the curves below are measured on **Qwen2.5-VL-7B**. Equivalent
+> trade-off plots for Qwen2.5-VL-3B and Qwen3-VL-4B are in the paper.
+
 <p align="center">
   <img src="assets/results_doc_ocr.png" alt="Doc/OCR throughput-vs-accuracy trade-off" width="48%">
   <img src="assets/results_hr.png" alt="High-resolution vision throughput-vs-accuracy trade-off" width="48%">

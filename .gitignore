@@ -2,6 +2,9 @@
 tests_local/
 logs/
 
+# Project page (deployed separately to gh-pages, not main)
+project_page/
+
 # Training / eval output dirs (per-checkpoint, not source)
 output/
 wandb/
