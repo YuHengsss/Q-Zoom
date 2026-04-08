@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://yuhengsss.github.io/Q-Zoom/"><img alt="Project Page" src="https://img.shields.io/badge/🌐%20Project%20Page-yuhengsss.github.io%2FQ--Zoom-1f6feb?style=for-the-badge"></a>
   &nbsp;
-  <a href="https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-7B"><img alt="HF Models" src="https://img.shields.io/badge/🤗%20Models-YuhengSSS%2FQ--Zoom-yellow?style=for-the-badge"></a>
+  <a href="https://huggingface.co/collections/YuhengSSS/q-zoom"><img alt="HF Models" src="https://img.shields.io/badge/🤗%20Models-YuhengSSS%2FQ--Zoom-yellow?style=for-the-badge"></a>
   &nbsp;
   <a href="https://huggingface.co/datasets/YuhengSSS/Q-Zoom-Training"><img alt="HF Dataset" src="https://img.shields.io/badge/📦%20Training%20Data-YuhengSSS%2FQ--Zoom--Training-yellow?style=for-the-badge"></a>
 </p>
