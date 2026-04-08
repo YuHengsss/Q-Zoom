@@ -151,7 +151,7 @@ backbones on Hugging Face:
 
 | Backbone | Q-Zoom checkpoint (HF) | TWIG config |
 |---|---|---|
-| Qwen2.5-VL-3B | [`YuhengSSS/Q-Zoom-Qwen2.5VL-3B`](https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-3B) | K=12, T=3 |
+| Qwen2.5-VL-3B | [`YuhengSSS/Q-Zoom-Qwen2.5VL-3B`](https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-3B) | K=24, T=3 |
 | Qwen2.5-VL-7B | [`YuhengSSS/Q-Zoom-Qwen2.5VL-7B`](https://huggingface.co/YuhengSSS/Q-Zoom-Qwen2.5VL-7B) | K=18, T=3 |
 | Qwen3-VL-4B   | [`YuhengSSS/Q-Zoom-Qwen3VL-4B`](https://huggingface.co/YuhengSSS/Q-Zoom-Qwen3VL-4B)   | K=24, T=3 |
 
@@ -271,7 +271,7 @@ See `examples/README.md` for the full set of environment variables.
 
 | Backbone | twig_K | twig_T |
 |---|---|---|
-| Qwen2.5-VL-3B | 12 | 3 |
+| Qwen2.5-VL-3B | 24 | 3 |
 | Qwen2.5-VL-7B | 18 | 3 |
 | Qwen3-VL-4B   | 24 | 3 |
 
