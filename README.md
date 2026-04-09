@@ -1,6 +1,8 @@
 # Q-Zoom: Query-Aware Adaptive Perception for Efficient Multimodal Large Language Models
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2604.06912"><img alt="arXiv" src="https://img.shields.io/badge/📄%20arXiv-2604.06912-b31b1b?style=for-the-badge"></a>
+  &nbsp;
   <a href="https://yuhengsss.github.io/Q-Zoom/"><img alt="Project Page" src="https://img.shields.io/badge/🌐%20Project%20Page-yuhengsss.github.io%2FQ--Zoom-1f6feb?style=for-the-badge"></a>
   &nbsp;
   <a href="https://huggingface.co/collections/YuhengSSS/q-zoom"><img alt="HF Models" src="https://img.shields.io/badge/🤗%20Models-YuhengSSS%2FQ--Zoom-yellow?style=for-the-badge"></a>
@@ -39,15 +41,6 @@ baseline's peak accuracy; configured for maximum perceptual fidelity it
 **surpasses the baseline's peak by +1.1% (Doc/OCR) and +8.1% (HR)**. The
 same recipe transfers seamlessly to Qwen3-VL, LLaVA, and emerging
 RL-based thinking-with-image models.
-
-<p align="center">
-  <img src="assets/paradigm_comparison.png" alt="Q-Zoom vs training-tree and RL paradigms" width="92%">
-</p>
-
-> Compared to training-tree-based detail-zoom methods (e.g. ViCrop) and
-> RL-supervised tool-use methods (e.g. Thyme), Q-Zoom answers the same
-> question with **a single forward pass plus an optional ROI re-decode**,
-> gated per sample by the TWIG branch — at a fraction of the latency.
 
 This repository contains:
 
@@ -339,6 +332,7 @@ If you use Q-Zoom in your research, please cite our paper:
             Multimodal Large Language Models},
   author = {Shi, Yuheng and Pei, Xiaohuan and Wen, Linfeng and
             Dong, Minjing and Xu, Chang},
+  journal= {arXiv preprint arXiv:2604.06912},
   year   = {2026}
 }
 ```
