@@ -11,7 +11,7 @@
 <meta property="og:title" content="Q-Zoom: Query-Aware Adaptive Perception for Efficient Multimodal Large Language Models">
 <meta property="og:description" content="Coarse-to-fine MLLM inference with a Self-Distilled RPN and a Dynamic Gating Network. 2.52× Doc/OCR speedup, 4.39× HR speedup.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="assets/paradigm_comparison.png">
+<meta property="og:image" content="assets/inference_pipeline.png">
 <meta name="twitter:card" content="summary_large_image">
 
 <title>Q-Zoom: Query-Aware Adaptive Perception for Efficient MLLMs</title>
@@ -608,6 +608,236 @@
       grid-template-columns: 1fr;
     }
   }
+
+  /* ============================== ANIMATION ============================== */
+  /* Left column = one Case A "needs zoom" card.
+     Right column = a vertically stacked PAIR of Case B "skip zoom" cards
+     (so two landscape images together roughly match the tall left infographic). */
+  .anim-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.4rem;
+    align-items: stretch;
+  }
+  .anim-col-b {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 760px) {
+    .anim-row { grid-template-columns: 1fr; }
+    .anim-col-b { gap: 1.5rem; }
+  }
+  .anim-card {
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .anim-card h4 {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 17px;
+    margin: 0 0 4px;
+  }
+  .anim-card .anim-q {
+    font-size: 14px;
+    color: var(--fg-muted);
+    margin-bottom: 12px;
+    min-height: 2.5em;
+  }
+  .anim-stage {
+    position: relative;
+    width: 100%;
+    max-height: 70vh;
+    background: #000;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* The base image: regular flow, sets the stage height to its natural aspect */
+  .anim-stage > img.base {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+  }
+  /* Overlays (heatmap, bbox, answer card, gate badge) ride on top of the base */
+  .anim-stage .heatmap,
+  .anim-stage .bbox,
+  .anim-stage .answer-card,
+  .anim-stage .gate-badge {
+    position: absolute;
+  }
+  .anim-stage img.heatmap {
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+  }
+  /* Heatmap overlay */
+  .anim-stage .heatmap {
+    mix-blend-mode: screen;
+    opacity: 0;
+  }
+  /* BBox overlay rectangle (positioned by inline style) */
+  .anim-stage .bbox {
+    border: 3px solid #ff5722;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.32);
+    box-sizing: border-box;
+    opacity: 0;
+    border-radius: 2px;
+  }
+  /* RoI zoom panel: appears at phase 3 to enlarge the cropped region */
+  .anim-stage .roi-zoom {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 58%;
+    height: auto;
+    transform: translate(-50%, -50%) scale(0.4);
+    background: #fff;
+    border: 3px solid #ff5722;
+    border-radius: 8px;
+    box-shadow: 0 12px 38px rgba(0,0,0,0.55);
+    padding: 6px;
+    opacity: 0;
+    z-index: 5;
+  }
+  .anim-stage .roi-zoom > img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+  .anim-stage .roi-zoom .roi-zoom-label {
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff5722;
+    color: #fff;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  /* Answer card */
+  .anim-stage .answer-card {
+    top: auto;
+    left: 50%;
+    bottom: 14px;
+    transform: translate(-50%, 18px);
+    background: rgba(255,255,255,0.97);
+    color: #1f2328;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    opacity: 0;
+    white-space: nowrap;
+  }
+  .anim-stage .answer-card .answer-correct {
+    color: #1aa363;
+    font-weight: 700;
+    margin-left: 5px;
+  }
+  .anim-stage .answer-card .answer-wrong {
+    color: #d63b3b;
+    font-weight: 700;
+    margin-left: 5px;
+    text-decoration: line-through;
+  }
+  /* Gating badge for Case B */
+  .anim-stage .gate-badge {
+    top: 12px;
+    left: 12px;
+    background: rgba(31, 111, 235, 0.92);
+    color: #fff;
+    border-radius: 14px;
+    padding: 5px 11px;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+  }
+
+  /* Case A — 12s, 4 phases:
+       phase 1 (0-25%)  : heatmap fades in over the original image (mix-blend)
+       phase 2 (25-45%) : bbox draws around the high-attention region
+       phase 3 (45-72%) : RoI zoom panel scales up so the cropped detail is readable
+       phase 4 (72-95%) : answer card overlays at the bottom of the stage     */
+  @keyframes anim-a-heatmap {
+    0%, 5%   { opacity: 0; }
+    18%, 50% { opacity: 1; }
+    60%, 100% { opacity: 0; }
+  }
+  @keyframes anim-a-bbox {
+    0%, 22%  { opacity: 0; }
+    32%, 55% { opacity: 1; }
+    62%, 100% { opacity: 0; }
+  }
+  @keyframes anim-a-zoom {
+    0%, 45%  { opacity: 0; transform: translate(-50%, -50%) scale(0.40); }
+    58%, 92% { opacity: 1; transform: translate(-50%, -50%) scale(1.00); }
+    98%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.40); }
+  }
+  @keyframes anim-a-answer {
+    0%, 70%  { opacity: 0; transform: translate(-50%, 18px); }
+    80%, 94% { opacity: 1; transform: translate(-50%, 0); }
+    98%, 100% { opacity: 0; transform: translate(-50%, 18px); }
+  }
+  .anim-stage.anim-a .heatmap     { animation: anim-a-heatmap 12s ease-in-out infinite; }
+  .anim-stage.anim-a .bbox        { animation: anim-a-bbox    12s ease-in-out infinite; }
+  .anim-stage.anim-a .roi-zoom    { animation: anim-a-zoom    12s ease-in-out infinite; }
+  .anim-stage.anim-a .answer-card { animation: anim-a-answer  12s ease-in-out infinite; }
+
+  /* Case B: src → gate badge fades in (1.0s) → answer (2.0s) → loop */
+  @keyframes anim-b-badge {
+    0%, 12% { opacity: 0; }
+    25%, 80% { opacity: 1; }
+    92%, 100% { opacity: 0; }
+  }
+  @keyframes anim-b-answer {
+    0%, 25% { opacity: 0; transform: translate(-50%, 18px); }
+    37%, 88% { opacity: 1; transform: translate(-50%, 0); }
+    98%, 100% { opacity: 0; transform: translate(-50%, 18px); }
+  }
+  .anim-stage.anim-b .gate-badge   { animation: anim-b-badge  12s ease-in-out infinite; }
+  .anim-stage.anim-b .answer-card  { animation: anim-b-answer 12s ease-in-out infinite; }
+
+  .anim-caption {
+    margin-top: 0.9rem;
+    color: var(--fg-muted);
+    font-size: 13px;
+    text-align: center;
+    font-style: italic;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .anim-stage .heatmap,
+    .anim-stage .bbox,
+    .anim-stage .roi-zoom,
+    .anim-stage .answer-card,
+    .anim-stage .gate-badge {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: translate(-50%, -50%) !important;
+    }
+    /* For the answer card / gate badge their original transforms differ */
+    .anim-stage .answer-card { transform: translate(-50%, 0) !important; }
+    .anim-stage .gate-badge  { transform: none !important; }
+  }
 </style>
 
 <!-- Chinese-friendly font (only loaded once; no impact on EN view) -->
@@ -682,7 +912,7 @@
 
           <div class="publication-links">
             <span class="link-block">
-              <a href="https://arxiv.org/abs/XXXX.XXXXX" class="external-link button is-normal is-rounded is-dark">
+              <a href="https://arxiv.org/abs/2604.06912" class="external-link button is-normal is-rounded is-dark">
                 <span class="icon"><i class="ai ai-arxiv"></i></span>
                 <span>arXiv</span>
               </a>
@@ -709,27 +939,6 @@
 
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================== TEASER ============================== -->
-<section class="section section-teaser" style="padding-top: 2rem;">
-  <div class="container is-max-desktop">
-    <div class="figure-block teaser-figure">
-      <img src="assets/paradigm_comparison.png" alt="Q-Zoom vs training-tree and RL paradigms">
-      <p class="caption">
-        <span class="lang-en">
-          Compared to training-tree-based detail-zoom methods (e.g. ViCrop, 4.2 s) and RL-supervised
-          tool-use methods (e.g. Thyme, 15.9 s), <strong>Q-Zoom</strong> answers the same question
-          with a single forward pass plus an optional ROI re-decode — at <strong>1.4 s</strong>.
-        </span>
-        <span class="lang-zh">
-          相比基于训练树的细节缩放方法（如 ViCrop，4.2 秒）和基于强化学习的工具调用方法
-          （如 Thyme，15.9 秒），<strong>Q-Zoom</strong> 只需一次前向传播，并在需要时额外进行一次
-          RoI 重解码，就能回答同样的问题，总耗时仅为 <strong>1.4 秒</strong>。
-        </span>
-      </p>
     </div>
   </div>
 </section>
@@ -1122,6 +1331,135 @@
         </span>
       </p>
     </div>
+
+    <!-- ============================== ANIMATION ============================== -->
+    <div class="content" style="margin-top: 2rem;">
+      <h3>
+        <span class="lang-en">The dynamic gate in action</span>
+        <span class="lang-zh">动态门控网络的实际效果</span>
+      </h3>
+      <p class="lang-en">
+        Two real samples processed by the same Q-Zoom-Qwen2.5-VL-7B checkpoint at the
+        canonical resolution. On the left (<strong>InfoVQA</strong>), the gating head fires
+        (score <strong>0.984</strong>) → SD-RPN finds the small "Wages per day" bar chart
+        → re-decoding the crop reads the Ecuador and Panama bars and sums them. On the
+        right (<strong>TextVQA</strong>), the gating head correctly skips
+        (score <strong>0.000</strong>) — the answer is globally obvious — and the model
+        answers directly without any extra compute.
+      </p>
+      <p class="lang-en" style="font-size: 13px; color: var(--fg-muted); margin-top: -0.4rem;">
+        <em>Note: the SD-RPN heatmap and gate scores shown here are produced under a
+        <strong>max visual token limit of 576</strong> per image.</em>
+      </p>
+      <p class="lang-zh">
+        两个真实样本，由同一个 Q-Zoom-Qwen2.5-VL-7B 模型在相同分辨率下处理。
+        <strong>左侧</strong>（<strong>InfoVQA</strong>）：门控头触发（分数
+        <strong>0.984</strong>）→ SD-RPN 找到那个小小的“每日工资”柱状图 →
+        仅对裁剪区域重解码即可读出厄瓜多尔与巴拿马的数值并相加。
+        <strong>右侧</strong>（<strong>TextVQA</strong>）：门控头正确选择跳过（分数
+        <strong>0.000</strong>）— 因为答案在全局视图中显而易见 — 模型无需额外计算就
+        直接给出回答。
+      </p>
+      <p class="lang-zh" style="font-size: 13px; color: var(--fg-muted); margin-top: -0.4rem;">
+        <em>注：此处的 SD-RPN 热图和门控分数是在
+        <strong>最大视觉 token 数 576</strong>
+        的设置下得到的。</em>
+      </p>
+    </div>
+
+    <div class="anim-row">
+      <!-- ========== Case A — needs zoom ========== -->
+      <div class="anim-card">
+        <h4>
+          <span class="lang-en">Case A — gate fires, RoI re-decode helps</span>
+          <span class="lang-zh">情况 A — 门控触发，RoI 重解码起作用</span>
+        </h4>
+        <div class="anim-q">
+          <span class="lang-en">"What is the wage per day in Ecuador and Panama, taken together?" &nbsp;·&nbsp; gate=0.984</span>
+          <span class="lang-zh">"What is the wage per day in Ecuador and Panama, taken together?" &nbsp;·&nbsp; 门控分数 0.984</span>
+        </div>
+        <div class="anim-stage anim-a">
+          <img class="base" src="assets/animation/case_a_src.jpg" alt="Source image (Banana Wars infographic)">
+          <img class="heatmap" src="assets/animation/case_a_heatmap.png" alt="SD-RPN attention heatmap">
+          <!-- bbox = [166, 580, 333, 870] xyxy in the 600×1000 source image
+               → left=27.67%, top=58%, width=27.83%, height=29%
+               (the lower-left "WAGES PER DAY" chart with the country bars) -->
+          <div class="bbox" style="left:27.67%; top:58%; width:27.83%; height:29%;"></div>
+          <!-- Phase 3: zoomed-in RoI crop appears so the chart is readable -->
+          <div class="roi-zoom">
+            <span class="roi-zoom-label">
+              <span class="lang-en">RoI crop · re-decoded</span>
+              <span class="lang-zh">RoI 裁剪 · 重新解码</span>
+            </span>
+            <img src="assets/animation/case_a_roi.jpg" alt="Cropped WAGES PER DAY chart">
+          </div>
+          <div class="answer-card">
+            <span class="lang-en">Q-Zoom: <span class="answer-correct">$18.25 ✓</span> &nbsp;|&nbsp; direct: <span class="answer-wrong">124</span></span>
+            <span class="lang-zh">Q-Zoom: <span class="answer-correct">$18.25 ✓</span> &nbsp;|&nbsp; 直接解码: <span class="answer-wrong">124</span></span>
+          </div>
+        </div>
+        <p class="anim-caption">
+          <span class="lang-en">SD-RPN heatmap → bbox → re-decode the chart → "$18.25"</span>
+          <span class="lang-zh">SD-RPN 热图 → 边界框 → 重新解码该图表 → "$18.25"</span>
+        </p>
+      </div>
+
+      <!-- ========== Case B — skip the zoom (stacked: 2 examples) ========== -->
+      <div class="anim-col-b">
+
+        <!-- Case B.1 — STOP sign -->
+        <div class="anim-card">
+          <h4>
+            <span class="lang-en">Case B — gate skips, no RoI loop fires</span>
+            <span class="lang-zh">情况 B — 门控跳过，无需触发 RoI 循环</span>
+          </h4>
+          <div class="anim-q">
+            <span class="lang-en">"What does the sign say?" &nbsp;·&nbsp; gate=0.000</span>
+            <span class="lang-zh">"What does the sign say?" &nbsp;·&nbsp; 门控分数 0.000</span>
+          </div>
+          <div class="anim-stage anim-b">
+            <img class="base" src="assets/animation/case_b_src.jpg" alt="Source image (large STOP sign)">
+            <div class="gate-badge">
+              <span class="lang-en">Gate 0.000 &lt; 0.05 → SKIP RoI</span>
+              <span class="lang-zh">门控 0.000 &lt; 0.05 → 跳过 RoI</span>
+            </div>
+            <div class="answer-card">
+              <span class="lang-en">Q-Zoom: <span class="answer-correct">Stop ✓</span> (direct decode)</span>
+              <span class="lang-zh">Q-Zoom: <span class="answer-correct">Stop ✓</span>（直接解码）</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case B.2 — toy police car -->
+        <div class="anim-card">
+          <h4>
+            <span class="lang-en">Case B — gate skips again</span>
+            <span class="lang-zh">情况 B — 门控再次跳过</span>
+          </h4>
+          <div class="anim-q">
+            <span class="lang-en">"What does it say on the car?" &nbsp;·&nbsp; gate=0.000</span>
+            <span class="lang-zh">"What does it say on the car?" &nbsp;·&nbsp; 门控分数 0.000</span>
+          </div>
+          <div class="anim-stage anim-b">
+            <img class="base" src="assets/animation/case_b2_src.jpg" alt="Source image (toy police car with POLICE livery)">
+            <div class="gate-badge">
+              <span class="lang-en">Gate 0.000 &lt; 0.05 → SKIP RoI</span>
+              <span class="lang-zh">门控 0.000 &lt; 0.05 → 跳过 RoI</span>
+            </div>
+            <div class="answer-card">
+              <span class="lang-en">Q-Zoom: <span class="answer-correct">POLICE ✓</span> (direct decode)</span>
+              <span class="lang-zh">Q-Zoom: <span class="answer-correct">POLICE ✓</span>（直接解码）</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="anim-caption" style="margin-top:1rem;">
+      <span class="lang-en">For the two right-hand examples the gating sigmoid is essentially zero — SD-RPN never runs at all and the model decodes directly.</span>
+      <span class="lang-zh">对于右侧两个样本，门控 sigmoid 几乎为零 — SD-RPN 完全不运行，模型直接解码。</span>
+    </p>
   </div>
 </section>
 
@@ -1185,6 +1523,7 @@ CHECKPOINT_PATH=./checkpoints/Q-Zoom-Qwen2.5VL-7B \
             Multimodal Large Language Models},
   author = {Shi, Yuheng and Pei, Xiaohuan and Wen, Linfeng and
             Dong, Minjing and Xu, Chang},
+  journal= {arXiv preprint arXiv:2604.06912},
   year   = {2026}
 }</code></pre>
 
